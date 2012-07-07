@@ -83,10 +83,22 @@ struct connection_handler : reactor_handler {
     void process_write();
     
     void process_event() override {
-        if (connection_state_ == CONN_READING) {
-            process_read();
-        } else {
-            process_write();
+        try {
+            if (connection_state_ == CONN_READING) {
+                process_read();
+            } else {
+                process_write();
+            }
+        } catch (...) {
+            cerr << current_exception_information();
+            kill_me_softly();
+        }
+    }
+    
+    void kill_me_softly() {
+        reactor_descriptor_->remove();
+        if (!!read_file_handler_) {
+            read_file_handler_->reactor_descriptor_->remove();
         }
     }
 };
@@ -254,22 +266,26 @@ void connection_handler::process_write() {
         read_file_handler_->reactor_descriptor_->change_mask(POLLER_READ);
     } else {
         cerr << "response sent" << endl;
-        reactor_descriptor_->remove();
+        kill_me_softly();
     }
 }
 
 void read_file_handler::process_event() {
-    char buf[0x1000];
-    size_t readen = read_x(reactor_descriptor_->fd(), buf, sizeof(buf));
-    if (readen == 0) {
-        cerr << "file response sent" << endl;
-        reactor_descriptor_->remove();
-        connection_handler_->reactor_descriptor_->remove();
-    } else {
-        connection_handler_->response_chunk_ = string(buf, readen);
-        connection_handler_->response_chunk_pos_ = 0;
-        connection_handler_->reactor_descriptor_->change_mask(POLLER_WRITE);
-        reactor_descriptor_->change_mask(0);
+    try {
+        char buf[0x1000];
+        size_t readen = read_x(reactor_descriptor_->fd(), buf, sizeof(buf));
+        if (readen == 0) {
+            cerr << "file response sent" << endl;
+            connection_handler_->kill_me_softly();
+        } else {
+            connection_handler_->response_chunk_ = string(buf, readen);
+            connection_handler_->response_chunk_pos_ = 0;
+            connection_handler_->reactor_descriptor_->change_mask(POLLER_WRITE);
+            reactor_descriptor_->change_mask(0);
+        }
+    } catch (...) {
+        cerr << current_exception_information();
+        connection_handler_->kill_me_softly();
     }
 }
 

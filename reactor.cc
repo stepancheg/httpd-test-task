@@ -46,6 +46,7 @@ struct reactor::state : noncopyable {
     void run() {
         for (;;) {
             iteration();
+            // exception is not caught here. if handler throws, reactor quits
         }
     }
     
