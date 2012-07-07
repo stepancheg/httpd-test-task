@@ -7,7 +7,6 @@
 #include "server.h"
 #include "misc.h"
 #include "fd.h"
-#include "ptr.h"
 #include "unix.h"
 
 using namespace std;

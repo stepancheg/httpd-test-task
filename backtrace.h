@@ -5,16 +5,16 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <memory>
 
 #include "misc.h"
-#include "ptr.h"
 
 class backtrace_holder /* TODO: noncopyable */ {
     static const int SIZE = 32;
 
     void* pointers_[SIZE];
     unsigned size_ = 0;
-    mutable unique_ptr<std::vector<std::string>> human_readable_;
+    mutable std::unique_ptr<std::vector<std::string>> human_readable_;
 public:
     backtrace_holder();
     void print(std::ostream& = std::cerr) const;

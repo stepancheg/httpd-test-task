@@ -1,9 +1,12 @@
 #ifndef _FD_H_INCLUDED
 #define _FD_H_INCLUDED
 
+
+#include <memory>
+
 #include "misc.h"
-#include "ptr.h"
 #include "backtrace.h"
+
 
 // non-copyable file descriptor holder
 class fd_owner : noncopyable {
@@ -21,7 +24,7 @@ public:
 
 // reference-counter fd holder
 class fd {
-    shared_ptr<fd_owner> fd_;
+    std::shared_ptr<fd_owner> fd_;
 public:
     fd() {
     }
