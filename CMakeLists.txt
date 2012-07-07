@@ -2,12 +2,10 @@ cmake_minimum_required(VERSION 2.8)
 
 project(httpd-test-task)
 
-#set(CMAKE_CXX_COMPILER clang++)
-set(CMAKE_CXX_COMPILER g++)
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -g -W -Wno-unused-parameter")
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    set(CMAKE_CXX_COMPILER clang++)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
 endif()
 
