@@ -38,8 +38,9 @@ void backtrace_holder::init_hr() const {
             } else {
                 name = "??";
             }
-            string r = name + "+" + to_str(std::abs((long) pointers_[i] - (long) dl.dli_saddr));
-            human_readable_->push_back(r);
+            stringstream r;
+            r << name << "+" << std::abs((long) pointers_[i] - (long) dl.dli_saddr);
+            human_readable_->push_back(r.str());
         }
     }
 }

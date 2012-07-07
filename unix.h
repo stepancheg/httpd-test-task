@@ -4,8 +4,12 @@
 #include <sys/socket.h>
 #include <sys/stat.h>
 
-
 #include "fd.h"
+
+
+/// wrappers around some unix utilities
+/// _x functions throw exception on error
+
 
 fd socket_x(int domain, int type, int protocol);
 void bind_x(int fd, const sockaddr* addr, socklen_t address_len);

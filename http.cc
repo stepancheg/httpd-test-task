@@ -13,7 +13,7 @@ http_request&& parse_http_request(const std::string& req) {
     
     // TODO: better parser, faster parser, HTTP/1.0 and tons of features
     
-    regex re("GET (.*) HTTP/1.1[^]*\r\n\r\n.*");
+    regex re("GET (/.*) HTTP/1.[01][^]*\r\n\r\n.*");
     
     smatch m;
     
@@ -47,6 +47,20 @@ void test_parse_http_request_valid() {
     ua(r.valid_);
     ua(r.complete_);
     ua_eq("/hello/world", r.uri_);
+}
+
+void test_parse_http_request_from_wget() {
+    const char* rs =
+        "GET /status HTTP/1.0\r\n"
+        "User-Agent: Wget/1.12 (darwin10.7.0)\r\n"
+        "Accept: */*\r\n"
+        "Host: localhost:8877\r\n"
+        "Connection: Keep-Alive\r\n"
+        "\r\n";
+    http_request r = parse_http_request(rs);
+    ua(r.valid_);
+    ua(r.complete_);
+    ua_eq("/status", r.uri_);
 }
 
 

@@ -5,8 +5,11 @@
 
 
 struct http_request {
+    // request contains header
     bool complete_ = false;
+    // request is valid
     bool valid_ = false;
+    // request uri is request is valid and complete
     std::string uri_;
 };
 

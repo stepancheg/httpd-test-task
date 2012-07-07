@@ -14,6 +14,7 @@
         } \
     } while (0)
 
+/// unittest comparison
 #define ua_op(expected, op, got) do { \
         if (!((expected) op (got))) { \
             std::cerr << "assertion " #expected " " #op " " #got " failed: !(" << (expected) << " " #op " " << (got) << ")" \
@@ -23,6 +24,7 @@
         } \
     } while (0)
 
+/// unittest equals
 #define ua_eq(expected, got) ua_op(expected, ==, got)    
 
 #endif /* _TEST_H_INCLUDED */

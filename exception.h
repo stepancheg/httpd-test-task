@@ -7,6 +7,7 @@
 #include "misc.h"
 #include "backtrace.h"
 
+// my exception that remembers stack trace
 class exception {
 public:
     backtrace_holder backtrace_;

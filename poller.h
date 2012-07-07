@@ -23,10 +23,13 @@ public:
     ~poller();
     void add_fd(int fd, int mask, void* tag);
     void remove_fd(int fd);
+    // change mask of specified descriptor (may be zero)
     void change_fd(int fd, int new_mask);
     
+    // poll once
     void poll(std::vector<poll_result>* result);
     
+    // print poll state
     void debug_dump(std::ostream& os);
 };
 

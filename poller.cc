@@ -73,6 +73,7 @@ struct poller::state {
         for (pollfd& pfd : pollfds_) {
             pfd.revents = 0;
         }
+        // TODO: also implement with epoll
         int r = ::poll(&pollfds_[0], pollfds_.size(), -1);
         proper_assert(r > 0); // TODO, it maybe just sleep
         for (size_t i = 0; i < pollfds_.size(); ++i) {

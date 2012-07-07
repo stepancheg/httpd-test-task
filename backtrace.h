@@ -7,7 +7,6 @@
 #include <array>
 
 #include "misc.h"
-#include "types.h"
 #include "ptr.h"
 
 class backtrace_holder /* TODO: noncopyable */ {

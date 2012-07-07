@@ -12,6 +12,7 @@
 
 using namespace std;
 
+// open listening socket
 static fd listen() {
     fd fd_ = socket_x(PF_INET, SOCK_STREAM, 0);
     
@@ -32,6 +33,7 @@ static fd listen() {
     return fd_;
 }
 
+// run singlethreaded server with given descriptor
 static void thread_proc(fd* fd) {
     try {
         http_server server_(*fd);
@@ -43,6 +45,7 @@ static void thread_proc(fd* fd) {
 
 int main() {
     try {
+        // shared descriptor for multiple single-threaded servers
         fd listen_fd = listen();
     
         vector<pthread_t> threads;
@@ -51,6 +54,7 @@ int main() {
             pthread_create_x(&t, 0, (void *(*)(void *)) thread_proc, &listen_fd);
             threads.push_back(t);
         }
+        // unused currently, because proper server shutdown is not implemented
         for (auto thr : threads) {
             pthread_join_x(thr, 0);
         }

@@ -11,9 +11,12 @@
 class reactor;
 class reactor_descriptor;
 
+// callback
 class reactor_handler {
 public:
+    // called once right after registration
     virtual void initialize(reactor_descriptor* descriptor) = 0;
+    // actual callback
     virtual void process_event() = 0;
 };
 
@@ -22,12 +25,17 @@ public:
     struct state;
     std::unique_ptr<state> state_;
 
+    // fd associated with this descriptor
     const fd& fd();
+    // change poller mask
     void change_mask(int mask);
+    // unregister this descriptor
     void remove();
 };
 
-class reactor: noncopyable {
+// simple and incomplete implementation of the reactor pattern
+// http://en.wikipedia.org/wiki/Reactor_pattern
+class reactor : noncopyable {
 public:
     struct state;
     std::unique_ptr<state> state_;

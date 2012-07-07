@@ -10,6 +10,7 @@
 
 typedef std::function<void ()> test_case_function;
 
+/// very simple unittest library
 class test_suite {
     struct test_case {
         std::string name_;

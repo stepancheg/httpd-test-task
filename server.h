@@ -9,7 +9,7 @@ public:
     struct state;
     unique_ptr<state> state_;
 public:
-    // fd is listen fd
+    // http server relies on externally created listen fd
     http_server(fd& fd);
     ~http_server();
 };

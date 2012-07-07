@@ -5,17 +5,12 @@
 #include <sstream>
 #include <iostream>
 
+// print nice exception info, with stack trace if available
 std::string current_exception_information();
-
-template <typename T>
-std::string to_str(const T& t) {
-    std::stringstream ss;
-    ss << t;
-    return ss.str();
-}
 
 bool contains(const std::string& thiz, const std::string substring);
 
+// unconditional assert
 #define proper_assert(cond) \
     do { \
         if (!(cond)) { \

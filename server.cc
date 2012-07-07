@@ -67,7 +67,7 @@ struct connection_handler : reactor_handler {
     }
     
     void send_error(int code, const char* message) {
-        cerr << "sending error " << code << " " << message << endl;
+        //cerr << "sending error " << code << " " << message << endl;
         stringstream response;
         response << "HTTP/1.1 " << code << " Name\r\n"; // TODO: proper status name
         response << "Content-type: text/plain\r\n";
@@ -162,12 +162,14 @@ void connection_handler::process_read() {
     int c = read_x(reactor_descriptor_->fd(), &request_data[old_size], chunk);
     request_data.resize(old_size + c);
     if (c == 0) {
-        cerr << "eof, read " << request_data.size() << endl;
+        //cerr << "eof, read " << request_data.size() << endl;
         reactor_descriptor_->change_mask(0);
     }
     
     string request_string(request_data.size() > 0 ? &request_data[0] : "", request_data.size());
     http_request request = parse_http_request(request_string);
+    
+    //cerr << request_string;
     
     if (!request.complete_) {
         if (c == 0) {
@@ -233,11 +235,6 @@ void connection_handler::process_read() {
 }
 
 void connection_handler::process_write() {
-    cerr << "in write" << endl;
-    cerr << "rc:" << endl;
-    cerr << response_chunk_ << endl;
-    cerr << "*" << endl;
-    
     proper_assert(response_chunk_pos_ <= response_chunk_.size());
     
     const void* buf = response_chunk_.c_str() + response_chunk_pos_;

@@ -1,5 +1,7 @@
 #!/bin/sh -e
 
+# generate tests
+
 cd $(dirname $0)
 
 sed=sed

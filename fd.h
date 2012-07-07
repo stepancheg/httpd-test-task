@@ -5,6 +5,7 @@
 #include "ptr.h"
 #include "backtrace.h"
 
+// non-copyable file descriptor holder
 class fd_owner : noncopyable {
     int fd_;
 public:
@@ -12,11 +13,13 @@ public:
         proper_assert(fd >= 0);
     }
     ~fd_owner();
+    // unsafe operation: do not close it
     operator int() const {
         return fd_;
     }
 };
 
+// reference-counter fd holder
 class fd {
     shared_ptr<fd_owner> fd_;
 public:
