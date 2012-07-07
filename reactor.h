@@ -26,7 +26,7 @@ public:
     std::unique_ptr<state> state_;
 
     // fd associated with this descriptor
-    const fd& fd();
+    const class fd& fd();
     // change poller mask
     void change_mask(int mask);
     // unregister this descriptor

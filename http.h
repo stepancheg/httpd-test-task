@@ -6,14 +6,14 @@
 
 struct http_request {
     // request contains header
-    bool complete_ = false;
+    bool complete_;
     // request is valid
-    bool valid_ = false;
+    bool valid_;
     // request uri is request is valid and complete
     std::string uri_;
 };
 
-http_request&& parse_http_request(const std::string& data);
+http_request parse_http_request(const std::string& data);
 
 #endif /* _HTTP_H_INCLUDED */
 

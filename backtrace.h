@@ -13,7 +13,7 @@ class backtrace_holder /* TODO: noncopyable */ {
     static const int SIZE = 32;
 
     void* pointers_[SIZE];
-    unsigned size_ = 0;
+    unsigned size_;
     mutable std::unique_ptr<std::vector<std::string>> human_readable_;
 public:
     backtrace_holder();

@@ -12,7 +12,7 @@ enum {
 
 struct poll_result {
     int fd_;
-    void* tag_ = nullptr;
+    void* tag_;
 };
 
 class poller {

@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <fcntl.h>
+#include <string.h>
 
 #include "reactor.h"
 #include "fd.h"
@@ -25,43 +26,46 @@ struct read_file_handler;
 
 struct read_file_handler : reactor_handler {
     http_server::state* http_server_;
-    reactor_descriptor* reactor_descriptor_ = nullptr;
+    reactor_descriptor* reactor_descriptor_;
     connection_handler* connection_handler_;
     
     read_file_handler(http_server::state* http_server, connection_handler* connection_handler)
         : http_server_(http_server)
+        , reactor_descriptor_(nullptr)
         , connection_handler_(connection_handler)
     {
     }
     
-    void initialize(reactor_descriptor* reactor_descriptor) override {
+    void initialize(reactor_descriptor* reactor_descriptor) h_override {
         reactor_descriptor_ = reactor_descriptor;
         reactor_descriptor->change_mask(0);
     }
     
-    void process_event() override;
+    void process_event() h_override;
     
 };
 
 
 struct connection_handler : reactor_handler {
     http_server::state* http_server_;
-    reactor_descriptor* reactor_descriptor_ = nullptr;
+    reactor_descriptor* reactor_descriptor_;
     vector<char> request_data;
-    connection_state connection_state_ = CONN_READING;
+    connection_state connection_state_;
     
     // TODO: replace with some buffer
     string response_chunk_;
-    size_t response_chunk_pos_ = 0;
+    size_t response_chunk_pos_;
     
     shared_ptr<read_file_handler> read_file_handler_;
     
     connection_handler(http_server::state* http_server)
         : http_server_(http_server)
+        , reactor_descriptor_(nullptr)
+        , connection_state_(CONN_READING)
     {
     }
     
-    void initialize(reactor_descriptor* reactor_descriptor) override {
+    void initialize(reactor_descriptor* reactor_descriptor) h_override {
         reactor_descriptor_ = reactor_descriptor;
         reactor_descriptor->change_mask(POLLER_READ);
     }
@@ -82,7 +86,7 @@ struct connection_handler : reactor_handler {
     void process_read();
     void process_write();
     
-    void process_event() override {
+    void process_event() h_override {
         try {
             if (connection_state_ == CONN_READING) {
                 process_read();
@@ -105,19 +109,20 @@ struct connection_handler : reactor_handler {
 
 struct accept_handler : reactor_handler {
     http_server::state* http_server_;
-    reactor_descriptor* reactor_descriptor_ = nullptr;
+    reactor_descriptor* reactor_descriptor_;
     
     accept_handler(http_server::state* http_server)
         : http_server_(http_server)
+        , reactor_descriptor_(nullptr)
     {
     }
 
-    void initialize(reactor_descriptor* reactor_descriptor) override {
+    void initialize(reactor_descriptor* reactor_descriptor) h_override {
         reactor_descriptor_ = reactor_descriptor;
         reactor_descriptor->change_mask(POLLER_READ|POLLER_WRITE);
     }
     
-    void process_event() override;
+    void process_event() h_override;
 };
 
 

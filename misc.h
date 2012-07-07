@@ -5,6 +5,13 @@
 #include <sstream>
 #include <iostream>
 
+#ifdef __clang__
+#define h_override override
+#else
+#define h_override
+#endif
+
+
 // print nice exception info, with stack trace if available
 std::string current_exception_information();
 

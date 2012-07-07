@@ -19,7 +19,9 @@ static string demangle(const string& name) {
     return r;
 }
 
-backtrace_holder::backtrace_holder() {
+backtrace_holder::backtrace_holder()
+	: size_(0)
+{
     fill();
 }
 

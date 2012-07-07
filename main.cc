@@ -1,8 +1,8 @@
 #include <iostream>
-#include <thread>
 
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <string.h>
 
 #include "server.h"
 #include "misc.h"
@@ -23,7 +23,7 @@ static fd listen() {
         sockaddr addr;
     };
     memset(&in_addr, 0, sizeof(in_addr));
-    in_addr.sin_len = sizeof(in_addr);
+    in_addr.sin_family = AF_INET;
     int port = 8877;
     in_addr.sin_port = htons(port);
     bind_x(fd_, &addr, sizeof(in_addr));
