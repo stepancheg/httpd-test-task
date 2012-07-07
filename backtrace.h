@@ -4,8 +4,9 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <array>
 #include <memory>
+
+#include <stdlib.h>
 
 #include "misc.h"
 
