@@ -55,4 +55,15 @@ void setsockopt_x(int socket, int level, int option_name, const void *option_val
     check_rv(rv, "setsockopt");
 }
 
+void pthread_create_x(pthread_t *thread, const pthread_attr_t *attr, void *(*start_routine)(void *), void *arg) {
+    int rv = pthread_create(thread, attr, start_routine, arg);
+    check_rv(rv, "pthread_create");
+}
+
+void pthread_join_x(pthread_t thr, void **value_ptr) {
+    int rv = pthread_join(thr, value_ptr);
+    check_rv(rv, "pthread_join");
+}
+
+
 // vim: set ts=4 sw=4 et:

@@ -18,7 +18,6 @@ using namespace std;
 enum connection_state {
     CONN_READING,
     CONN_SENDING_RESPONSE,
-    CONN_DONE,
 };
 
 struct connection_handler;
@@ -114,23 +113,8 @@ struct http_server::state {
     reactor reactor_;
     fd fd_;
     
-    state() {
-        fd_ = socket_x(PF_INET, SOCK_STREAM, 0);
-        
-        int yes = 1;
-        setsockopt_x(fd_, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
-        
-        union {
-            sockaddr_in in_addr;
-            sockaddr addr;
-        };
-        memset(&in_addr, 0, sizeof(in_addr));
-        in_addr.sin_len = sizeof(in_addr);
-        int port = 8877;
-        in_addr.sin_port = htons(port);
-        bind_x(fd_, &addr, sizeof(in_addr));
-        listen_x(fd_);
-        cerr << "listening on port " << port << endl;
+    state(fd& fd) {
+        fd_ = fd;
         
         shared_ptr<reactor_handler> accept_handler_(new accept_handler(this));
         reactor_.add_descriptor(fd_, accept_handler_);
@@ -146,8 +130,8 @@ struct http_server::state {
     }
 };
 
-http_server::http_server()
-    : state_(new state)
+http_server::http_server(fd& fd)
+    : state_(new state(fd))
 {
 }
 

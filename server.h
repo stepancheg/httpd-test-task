@@ -2,13 +2,15 @@
 #define _SERVER_H_INCLUDED
 
 #include "ptr.h"
+#include "fd.h"
 
 class http_server {
 public:
     struct state;
     unique_ptr<state> state_;
 public:
-    http_server();
+    // fd is listen fd
+    http_server(fd& fd);
     ~http_server();
 };
 
