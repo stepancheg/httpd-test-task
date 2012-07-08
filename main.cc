@@ -3,6 +3,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <string.h>
+#include <fcntl.h>
 
 #include "server.h"
 #include "misc.h"
@@ -17,6 +18,9 @@ static fd listen() {
     
     int yes = 1;
     setsockopt_x(fd_, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes));
+    
+    int rv = fcntl(fd_, F_SETFL, O_NONBLOCK);
+    proper_assert(rv >= 0);
     
     union {
         sockaddr_in in_addr;

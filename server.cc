@@ -164,6 +164,14 @@ void accept_handler::process_event() {
     } addr;
     socklen_t addr_len = sizeof(addr);
     int fd_ = ::accept(reactor_descriptor_->fd(), &addr.sockaddr_addr, &addr_len);
+    
+    if (fd_ < 0) {
+        // possible when multiple servers accept on the same socket
+        if (errno == EWOULDBLOCK) {
+            return;
+        }
+    }
+    
     cerr << "accepted" << endl;
     proper_assert(fd_ >= 0);
     
@@ -278,6 +286,7 @@ void connection_handler::process_write() {
 void read_file_handler::process_event() {
     try {
         char buf[0x1000];
+        // TODO: implement sendfile
         size_t readen = read_x(reactor_descriptor_->fd(), buf, sizeof(buf));
         if (readen == 0) {
             cerr << "file response sent" << endl;
