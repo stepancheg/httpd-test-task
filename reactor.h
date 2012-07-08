@@ -18,6 +18,7 @@ public:
     virtual void initialize(reactor_descriptor* descriptor) = 0;
     // actual callback
     virtual void process_event() = 0;
+    virtual ~reactor_handler() { }
 };
 
 class reactor_descriptor : noncopyable {
